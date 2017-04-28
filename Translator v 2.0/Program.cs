@@ -12,28 +12,35 @@ namespace Translator_v_2._0
         {
             foreach (var item in Core.IndexsOfSplitSignF(Core.IndexsOfSplitSign))
             {
-                Console.WriteLine(item);
+                //Console.WriteLine(item);
             }
 
             int c=1;
 
             foreach (var item in Data.textToTranslate)
             {
-                Console.WriteLine(c.ToString() + " " + item.ToString());
+               // Console.WriteLine(c.ToString() + " " + item.ToString());
                 c++;
             }
 
             Core.TextToSplitCharTab();
             Core.DeleteEmptyCharTab(ref Core.TabAfterSignsSplit);
             Core.SetTabOfElement(ref Core.TabOfElement);
-            
+
+            Core.IsIdentyficator(ref Core.TabOfElement);
+            Core.IsFullId(ref Core.TabOfElement);
+            Core.DoubleOrInt(ref Core.TabOfElement);
+            Core.SplitNumberAndId(ref Core.TabOfElement);
+            Core.DoubleOrInt(ref Core.TabOfElement);
+            Core.SplitNumberAndId(ref Core.TabOfElement);
+            Core.DoubleOrInt(ref Core.TabOfElement);
+            Core.ErrorControl(ref Core.TabOfElement);
 
             foreach (var item in Core.TabOfElement)
             {
-                Console.WriteLine("??" + item.TextFragment + "\t  " + item.DataType + "\t \t " + item.SyntaxError);
+                string s = new string(item.TextFragment);
+                Console.WriteLine("Element: {0,15}                    Data type:  {1,22}                 Syntax error: {2,30}", s,item.DataType,item.SyntaxError);
             }
-
-
         }
     }
 

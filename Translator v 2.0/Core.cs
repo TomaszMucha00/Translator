@@ -116,6 +116,7 @@ namespace Translator_v_2._0
         {
             foreach (var item in TabAfterSignsSplit)
             {
+                bool isSplitSign = false;
                 foreach (var item2 in SplitSigns)
                 {
                     string tempString = "";
@@ -123,16 +124,231 @@ namespace Translator_v_2._0
                     {
                         tempString += temp2;
                     }
-                    Console.WriteLine(item.ToString() == item2.ToString());
                     if (tempString==item2.ToString())
                     {
                         Element temp = new Element(item);
                         temp.DataType = temp.SplitSignDict[item2.ToString()];
                         temp.SyntaxError = false;
                         TabOfElement.Add(temp);
+                        isSplitSign = true;
+                    }
+                }
+                if (!isSplitSign)
+                {
+                    Element temp = new Element(item);
+                    temp.DataType = "TempNull";
+                    temp.SyntaxError = false;
+                    TabOfElement.Add(temp);
+                }
+            }
+
+            TabOfElement.RemoveAt(TabOfElement.Count-1);
+        }
+
+        public static bool ErrorControlManyPoint( Element TestingObject)
+        {
+            bool b1 = (TestingObject.DataType == "Integer") || (TestingObject.DataType == "Double" )||( TestingObject.DataType == "Identyficator");
+
+            int counter = 0;
+
+            foreach (var item in TestingObject.TextFragment)
+            {
+                if (b1 && item == '.')
+                {
+                    counter++;
+                }   
+            }
+            if (counter>1)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool ErrorControlPointOnTheBegining( Element TestingObject)
+        {
+            bool b1 = TestingObject.DataType == "Integer" || TestingObject.DataType == "Double" || TestingObject.DataType == "Identyficator";
+
+            if (b1 && TestingObject.TextFragment.First() == '.')
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static bool ErrorControlPointOnTheEnd( Element TestingObject)
+        {
+            bool b1 = TestingObject.DataType == "Integer" || TestingObject.DataType == "Double" || TestingObject.DataType == "Identyficator";
+
+            if (b1 && TestingObject.TextFragment.Last() == '.')
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static bool ErrorControlNotAllowedSymbol( Element TestingObject)
+        {
+
+            bool b1 = TestingObject.DataType == "Integer" || TestingObject.DataType == "Double" || TestingObject.DataType == "Identyficator";
+
+            foreach (var item in TestingObject.TextFragment)
+            {
+                bool b2 = (item > 96 && item < 123) || (item > 47 && item < 58) || item == '.';
+                if (b1&&!b2)
+                {
+                    return false;
+                }
+            }
+
+
+            return true;
+        }
+
+        public static bool ErrorIdHaveDot(Element TestingObject)
+        {
+            int counter = 0;
+            foreach (var item in TestingObject.TextFragment)
+            {
+                if (item == '.')
+                {
+                    counter++;
+                }
+            }
+
+            if (TestingObject.DataType == "Identyficator" && counter!=0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static void ErrorControl(ref List<Element> TestingObject)
+        {
+            foreach (var item in TestingObject)
+            {
+                if(!(
+                ErrorControlManyPoint(item)&&
+                ErrorControlPointOnTheBegining(item) &&
+                ErrorControlPointOnTheEnd(item) &&
+                ErrorControlNotAllowedSymbol(item)&&
+                ErrorIdHaveDot(item) ))
+                {
+                    item.SyntaxError = true;
+                }
+            }
+        }
+
+        public static void IsIdentyficator(ref List<Element> TabOfElement)
+        {
+            bool id = false;
+            foreach (var element in TabOfElement)
+            {                
+                foreach (var sign in (new String(element.TextFragment).ToLower().ToCharArray()))
+                {
+                    if (sign>96 && sign<123)
+                    {
+                        id = true;
+                    }
+                }
+                if (id)
+                {
+                    element.DataType = "Contain id";
+                }
+                id = false;
+            }
+        }
+
+        public static void IsFullId(ref List<Element> TabOfElement)
+        {
+            foreach (var element in TabOfElement)
+            {
+                if (element.DataType == "Contain id")
+                {
+                    if (element.TextFragment.First()>96 && element.TextFragment.First() <123)
+                    {
+                        element.DataType = "Identyficator";
+                    }
+                    else
+                    {
+                        element.DataType = "To split";
                     }
                 }
             }
+        }
+
+        public static void DoubleOrInt(ref List<Element> TabOfElement)
+        {
+            foreach (var element in TabOfElement)
+            {
+                if (element.DataType == "TempNull")
+                {
+
+                    int counter = 0;
+                    foreach (var item in element.TextFragment)
+                    {
+                        if (item == '.')
+                        {
+                            counter++;
+                        }  
+                    }
+                    if (counter != 0)
+                    {
+                        element.DataType = "Double";
+                    }
+                    else
+                    {
+                        element.DataType = "Integer";
+                    }
+                }
+            }
+        }
+
+        public static int FindFirstLetter(char[] cTab)
+        {
+            for (int i = 0; i < cTab.Count(); i++)
+            {
+                if (cTab[i]> 96 && cTab[i] < 123)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public static void SplitNumberAndId(ref List<Element> TabOfElement)
+        {
+            Element temp;
+            int tempInt = TabOfElement.FindIndex(x => x.DataType == "To split");
+            temp = TabOfElement[TabOfElement.FindIndex(x => x.DataType == "To split")];
+            TabOfElement.RemoveAt(TabOfElement.FindIndex(x => x.DataType == "To split"));
+            char[] cTab1 = new char[FindFirstLetter(temp.TextFragment)];
+            char[] cTab2 = new char[temp.TextFragment.Count() - FindFirstLetter(temp.TextFragment)];
+            for (int i = 0; i <= FindFirstLetter(temp.TextFragment)-1; i++)
+            {
+                cTab1[i] = temp.TextFragment[i];
+            }
+            for (int i = FindFirstLetter(temp.TextFragment); i < temp.TextFragment.Count(); i++)
+            {
+                cTab2[i-FindFirstLetter(temp.TextFragment)] = temp.TextFragment[i];
+            }
+            Element e1 = new Element(cTab1);
+            Element e2 = new Element(cTab2);
+            e1.DataType = "TempNull";
+            e2.DataType = "Identyficator";
+            e1.SyntaxError = false;
+            e2.SyntaxError = false;
+            List<Element> tempList = new List<Element>();
+            tempList.Add(e1);
+            tempList.Add(e2);
+            TabOfElement.InsertRange(tempInt, tempList);
+            foreach (var item in e2.TextFragment)
+            {
+                Console.WriteLine("?" + item);
+            }
+            Console.WriteLine(" ");
+
         }
 
         #endregion

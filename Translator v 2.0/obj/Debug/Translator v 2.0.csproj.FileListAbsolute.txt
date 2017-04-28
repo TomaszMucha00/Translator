@@ -4,3 +4,9 @@ c:\users\varimatras\documents\visual studio 2015\Projects\Translator v 2.0\Trans
 c:\users\varimatras\documents\visual studio 2015\Projects\Translator v 2.0\Translator v 2.0\bin\Debug\Translator v 2.0.pdb
 c:\users\varimatras\documents\visual studio 2015\Projects\Translator v 2.0\Translator v 2.0\obj\Debug\Translator v 2.0.exe
 c:\users\varimatras\documents\visual studio 2015\Projects\Translator v 2.0\Translator v 2.0\obj\Debug\Translator v 2.0.pdb
+C:\Users\Varimatras\Documents\GitHub\Translator\Translator v 2.0\bin\Debug\Translator v 2.0.exe.config
+C:\Users\Varimatras\Documents\GitHub\Translator\Translator v 2.0\obj\Debug\Translator v 2.0.exe
+C:\Users\Varimatras\Documents\GitHub\Translator\Translator v 2.0\obj\Debug\Translator v 2.0.pdb
+C:\Users\Varimatras\Documents\GitHub\Translator\Translator v 2.0\bin\Debug\Translator v 2.0.exe
+C:\Users\Varimatras\Documents\GitHub\Translator\Translator v 2.0\bin\Debug\Translator v 2.0.pdb
+C:\Users\Varimatras\Documents\GitHub\Translator\Translator v 2.0\obj\Debug\Translator v 2.0.csprojResolveAssemblyReference.cache
