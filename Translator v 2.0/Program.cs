@@ -31,16 +31,21 @@ namespace Translator_v_2._0
             Core.IsFullId(ref Core.TabOfElement);
             Core.DoubleOrInt(ref Core.TabOfElement);
             Core.SplitNumberAndId(ref Core.TabOfElement);
-            Core.DoubleOrInt(ref Core.TabOfElement);
-            Core.SplitNumberAndId(ref Core.TabOfElement);
+            Core.ErrorControl(ref Core.TabOfElement);
             Core.DoubleOrInt(ref Core.TabOfElement);
             Core.ErrorControl(ref Core.TabOfElement);
+            Core.ErrorUpgradeDouble(ref Core.TabOfElement);
+            Core.ErrorUpgradeInteger(ref Core.TabOfElement);
+            Core.ErrorUpdateId(ref Core.TabOfElement);
+            Core.ErrorUpdateCheckId(ref Core.TabOfElement);
+            Core.ErrorUpdateIdExtraSymbol(ref Core.TabOfElement);
 
-            foreach (var item in Core.TabOfElement)
+            for (int i = 0; i <= Core.TabOfElement.FindIndex(x=>x.SyntaxError); i++)
             {
-                string s = new string(item.TextFragment);
-                Console.WriteLine("Element: {0,15}                    Data type:  {1,22}                 Syntax error: {2,30}", s,item.DataType,item.SyntaxError);
+                string s = new string(Core.TabOfElement[i].TextFragment);
+                Console.WriteLine("Element: {0,15}                    Data type:  {1,22}                 Lexical error: {2,30}", s,Core.TabOfElement[i].DataType, Core.TabOfElement[i].SyntaxError);
             }
+            
         }
     }
 
